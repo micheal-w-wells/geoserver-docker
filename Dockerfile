@@ -5,6 +5,8 @@ FROM tomcat:9-jre8
 #
 ENV GEOSERVER_VERSION=2.15.x
 ENV GEOSERVER_DATA_DIR="/geoserver_data/data"
+RUN chmod g=u /etc/passwd
+
 
 #
 # Download and install GeoServer
@@ -71,6 +73,7 @@ COPY requirements.txt /usr/local/tomcat/tmp
 COPY get_dockerhost_ip.py /usr/local/tomcat/tmp
 COPY get_nginxhost_ip.py /usr/local/tomcat/tmp
 COPY entrypoint.sh /usr/local/tomcat/tmp
+COPY add_to_passwd.sh /usr/local/tomcat/tmp
 
 RUN apt-get update \
     && apt-get -y upgrade \
@@ -78,6 +81,7 @@ RUN apt-get update \
     && chmod +x /usr/local/tomcat/tmp/set_geoserver_auth.sh \
     && chmod +x /usr/local/tomcat/tmp/setup_auth.sh \
     && chmod +x /usr/local/tomcat/tmp/entrypoint.sh \
+    && chmod +x /usr/local/tomcat/tmp/add_to_passwd.sh \
     && pip install pip==9.0.3 \
     && pip install -r requirements.txt \
     && chmod +x /usr/local/tomcat/tmp/get_dockerhost_ip.py \
@@ -85,4 +89,5 @@ RUN apt-get update \
 
 ENV JAVA_OPTS="-Djava.awt.headless=true -XX:MaxPermSize=512m -XX:PermSize=256m -Xms512m -Xmx2048m -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:ParallelGCThreads=4 -Dfile.encoding=UTF8 -Duser.timezone=GMT -Djavax.servlet.request.encoding=UTF-8 -Djavax.servlet.response.encoding=UTF-8 -Duser.timezone=GMT -Dorg.geotools.shapefile.datetime=true"
 
+RUN ["/usr/local/tomcat/tmp/add_to_passwd.sh"]
 CMD ["/usr/local/tomcat/tmp/entrypoint.sh"]
