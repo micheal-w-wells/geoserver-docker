@@ -16,7 +16,8 @@ RUN cd /usr/local/tomcat/webapps \
     https://build.geo-solutions.it/geonode/geoserver/latest/geoserver-${GEOSERVER_VERSION}.war \
     && unzip -q geoserver-${GEOSERVER_VERSION}.war -d geoserver \
     && rm geoserver-${GEOSERVER_VERSION}.war \
-    && mkdir -p $GEOSERVER_DATA_DIR
+    && mkdir -p $GEOSERVER_DATA_DIR \
+    && mkdir /usr/local/tomcat/tmp
 
 VOLUME $GEOSERVER_DATA_DIR
 
@@ -91,3 +92,4 @@ ENV JAVA_OPTS="-Djava.awt.headless=true -XX:MaxPermSize=512m -XX:PermSize=256m -
 
 RUN ["/usr/local/tomcat/tmp/add_to_passwd.sh"]
 CMD ["/usr/local/tomcat/tmp/entrypoint.sh"]
+USER 1001
