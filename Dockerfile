@@ -1,5 +1,4 @@
 FROM tomcat:9-jre8
-MAINTAINER GeoNode Development Team
 
 #
 # Set GeoServer version and data directory
@@ -45,7 +44,7 @@ RUN echo -n #1===>DOCKER_HOST_IP=${DOCKER_HOST_IP}
 # Trying to set the value of DOCKER_HOST_IP from DOCKER_HOST
 RUN if ! [ -z ${DOCKER_HOST_IP} ]; \
     then echo export DOCKER_HOST_IP=${DOCKERHOST} | \
-    sed 's/tcp:\/\/\([^:]*\).*/\1/' >> /root/.bashrc; \
+    sed 's/tcp:\/\/\([^:]*\).*/\1/' >> /usr/local/tomcat/tmp/.bashrc; \
     else echo "DOCKER_HOST_IP is already set!"; fi
 # for debugging
 RUN echo -n #2===>DOCKER_HOST_IP=${DOCKER_HOST_IP}
@@ -61,7 +60,7 @@ RUN echo -n #2===>PUBLIC_PORT=${PUBLIC_PORT}
 
 # set nginx base url for geoserver
 RUN echo export NGINX_BASE_URL=http://${NGINX_HOST}:${NGINX_PORT}/ | \
-    sed 's/tcp:\/\/\([^:]*\).*/\1/' >> /root/.bashrc
+    sed 's/tcp:\/\/\([^:]*\).*/\1/' >> /usr/local/tomcat/tmp/.bashrc
 
 # copy the script and perform the run of scripts from entrypoint.sh
 RUN mkdir -p /usr/local/tomcat/tmp

@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-source /root/.bashrc
+source /usr/local/tomcat/tmp/.bashrc
 
 # control the value of DOCKER_HOST_IP variable
 if [ -z ${DOCKER_HOST_IP} ]
 then
 
     echo "DOCKER_HOST_IP is empty so I'll run the python utility \n" >> /usr/local/tomcat/tmp/set_geoserver_auth.log
-    echo export DOCKER_HOST_IP=`python /usr/local/tomcat/tmp/get_dockerhost_ip.py` >> /root/.override_env
+    echo export DOCKER_HOST_IP=`python /usr/local/tomcat/tmp/get_dockerhost_ip.py` >> /usr/local/tomcat/tmp/.override_env
     echo "The calculated value is now DOCKER_HOST_IP='$DOCKER_HOST_IP' \n" >> /usr/local/tomcat/tmp/set_geoserver_auth.log
 
 else
@@ -22,7 +22,7 @@ if [ ${GEONODE_LB_HOST_IP} ]
 then
 
     echo "GEONODE_LB_HOST_IP is filled so I replace the value of '$DOCKER_HOST_IP' with '$GEONODE_LB_HOST_IP' \n" >> /usr/local/tomcat/tmp/set_geoserver_auth.log
-    echo export DOCKER_HOST_IP=${GEONODE_LB_HOST_IP} >> /root/.override_env
+    echo export DOCKER_HOST_IP=${GEONODE_LB_HOST_IP} >> /usr/local/tomcat/tmp/.override_env
 
 fi
 
@@ -30,7 +30,7 @@ if [ ${GEONODE_LB_PORT} ]
 then
 
     echo "GEONODE_LB_PORT is filled so I replace the value of '$PUBLIC_PORT' with '$GEONODE_LB_PORT' \n" >> /usr/local/tomcat/tmp/set_geoserver_auth.log
-    echo export PUBLIC_PORT=${GEONODE_LB_PORT} >> /root/.override_env
+    echo export PUBLIC_PORT=${GEONODE_LB_PORT} >> /usr/local/tomcat/tmp/.override_env
 
 fi
 
@@ -50,7 +50,7 @@ then
     # echo export NGINX_BASE_URL=`python /usr/local/tomcat/tmp/get_nginxhost_ip.py` >> /root/.override_env
     # TODO rework get_nginxhost_ip to get URL with static hostname from nginx service name
     # + exposed port of that container i.e. http://geonode:80
-    echo export NGINX_BASE_URL=http://geonode:80 >> /root/.override_env
+    echo export NGINX_BASE_URL=http://geonode:80 >> /usr/local/tomcat/tmp/.override_env
     echo "The calculated value is now NGINX_BASE_URL='$NGINX_BASE_URL' \n" >> /usr/local/tomcat/tmp/set_geoserver_auth.log
 
 else
